@@ -40,11 +40,11 @@
 
 | Màn hình Đăng nhập | Bảng điều khiển (Dashboard) |
 | :---: | :---: |
-| ![Login](link_anh_login_cua_ban.png) | ![Dashboard](link_anh_dashboard_cua_ban.png) |
+| ![Login]([link_anh_login_cua_ban.png](https://1drv.ms/i/c/a300ea25ccc7ec86/IQCpMPjCthmQS5JuZFJBHNe0AW9qhr383z3XoplLzBUIFLI?e=COX5b2)) | ![Dashboard]([link_anh_dashboard_cua_ban.png](https://1drv.ms/i/c/a300ea25ccc7ec86/IQD2pOfYP_b5QpGE8fHVQdklAYYtlZ9P3t0fgczbxLpUeao?e=zP4QYS)) |
 
 | Trợ lý Tư vấn AI | Kết xuất Excel |
 | :---: | :---: |
-| ![AI Advisor](link_anh_ai_cua_ban.png) | ![Excel Export](link_anh_excel_cua_ban.png) |
+| ![AI Advisor](https://1drv.ms/i/c/a300ea25ccc7ec86/IQAU6MJjIyGDT5hXYci7flG-AWShsOlOksBQDSr2qxQaOhY?e=XpOF3y) | ![Excel Export](https://1drv.ms/i/c/a300ea25ccc7ec86/IQCpErFWE3HxRpuDZhmcM2gvAS887Q0O52BRFQUitRdsSo0?e=JkRM8y) |
 
 ---
 
@@ -57,3 +57,12 @@
 Mở Terminal / Command Prompt và chạy lệnh sau để cài đặt các thư viện phụ thuộc:
 ```bash
 pip install customtkinter pandas matplotlib openpyxl
+---
+
+## 👨‍💻 Tác giả
+* **Hồ Trường Thịnh** (MSSV: 237729 - Lớp: DH23TIN09)
+* **Khoa:** Công Nghệ Thông Tin - Trường Đại học Nam Cần Thơ
+* **Cán bộ hướng dẫn:** ThS. Trần Văn Thiện
+
+---
+*Cảm ơn bạn đã quan tâm đến dự án này! Nếu thấy hữu ích, hãy cho mình xin một ⭐ (Star) nhé!*
