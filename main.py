@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime
+import random
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, parent, on_login):
@@ -16,19 +17,19 @@ class LoginScreen(ctk.CTkFrame):
         self.box.place(relx=0.5, rely=0.5, anchor="center")
         
         ctk.CTkLabel(self.box, text="🔐", font=("Segoe UI", 85)).pack(pady=(30, 10))
-        ctk.CTkLabel(self.box, text="XÁC THỰC AI", font=("Segoe UI", 28, "bold"), text_color=COLOR_ACCENT).pack(pady=5)
+        ctk.CTkLabel(self.box, text="XÁC THỰC TÀI KHOẢN", font=("Segoe UI", 28, "bold"), text_color=COLOR_ACCENT).pack(pady=5)
         
         self.user_entry = ctk.CTkEntry(self.box, placeholder_text="Tên đăng nhập...", width=320, height=55, 
                                        font=("Segoe UI", 18, "bold"), text_color=COLOR_NUMBER,
                                        fg_color=COLOR_ENTRY_BG, border_color=COLOR_ACCENT)
         self.user_entry.pack(pady=15)
         
-        self.pass_entry = ctk.CTkEntry(self.box, placeholder_text="Mật khẩu AI...", width=320, height=55, 
+        self.pass_entry = ctk.CTkEntry(self.box, placeholder_text="Mật khẩu...", width=320, height=55, 
                                        font=("Segoe UI", 18, "bold"), text_color=COLOR_NUMBER,
                                        show="*", fg_color=COLOR_ENTRY_BG, border_color=COLOR_ACCENT)
         self.pass_entry.pack(pady=15)
         
-        ctk.CTkButton(self.box, text="ĐĂNG NHẬP HỆ THỐNG", fg_color=COLOR_ACCENT, hover_color=COLOR_AI,
+        ctk.CTkButton(self.box, text="ĐĂNG NHẬP HỆ THỐNG", fg_color=COLOR_ACCENT, hover_color="#7C3AED",
                        width=320, height=60, font=("Segoe UI", 18, "bold"), command=self.check_login).pack(pady=25)
 
     def check_login(self):
@@ -43,7 +44,7 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         db.khoi_tao_db()
-        self.title("TRỢ LÝ TÀI CHÍNH AI")
+        self.title("TRỢ LÝ TÀI CHÍNH")
         self.geometry("1400x950")
         self.configure(fg_color=COLOR_BG)
         self.login_screen = LoginScreen(self, self.show_main_app)
@@ -55,7 +56,12 @@ class App(ctk.CTk):
         self.sidebar.pack(side="left", fill="y")
         ctk.CTkLabel(self.sidebar, text="💖 QUẢN LÝ CHI TIÊU", font=("Segoe UI", 32, "bold"), text_color=COLOR_ACCENT).pack(pady=50)
         
-        nav = [("🏠 TRANG CHỦ", "home"), ("💸 NHẬP CHI TIÊU", "add"), ("📊 THỐNG KÊ", "stats"), ("🎀 HỒ SƠ AI", "profile")]
+        nav = [("🏠 TRANG CHỦ", "home"), 
+               ("💸 NHẬP CHI TIÊU", "add"), 
+               ("📊 THỐNG KÊ", "stats"), 
+               ("🎀 HỒ SƠ CỦA BẠN", "profile"),
+               ("🤖 TƯ VẤN AI", "ai")]
+               
         for t, p in nav:
             ctk.CTkButton(self.sidebar, text=t, fg_color="transparent", anchor="w", height=60, 
                           font=("Segoe UI", 16, "bold"), command=lambda x=p: self.show_page(x)).pack(fill="x", padx=20, pady=5)
@@ -67,7 +73,8 @@ class App(ctk.CTk):
             "home": ctk.CTkScrollableFrame(self.container, fg_color="transparent"),
             "add": ctk.CTkFrame(self.container, fg_color=COLOR_CARD, corner_radius=25),
             "stats": ctk.CTkFrame(self.container, fg_color="transparent"),
-            "profile": ctk.CTkScrollableFrame(self.container, fg_color=COLOR_CARD, corner_radius=25)
+            "profile": ctk.CTkScrollableFrame(self.container, fg_color=COLOR_CARD, corner_radius=25),
+            "ai": ctk.CTkFrame(self.container, fg_color=COLOR_CARD, corner_radius=25)
         }
         self.init_pages()
         self.show_page("home")
@@ -77,6 +84,7 @@ class App(ctk.CTk):
         self.build_add(self.pages["add"])
         self.build_stats(self.pages["stats"])
         self.build_profile(self.pages["profile"])
+        self.build_ai(self.pages["ai"])
 
     def show_page(self, page_id):
         for p in self.pages.values(): p.pack_forget()
@@ -86,7 +94,7 @@ class App(ctk.CTk):
 
     # --- TRANG CHỦ ---
     def build_home(self, parent):
-        self.lbl_hi = ctk.CTkLabel(parent, text="Chào bạn YÊU,", font=("Segoe UI", 24), text_color="#CBD5E1")
+        self.lbl_hi = ctk.CTkLabel(parent, text="Chào bạn yêu,", font=("Segoe UI", 24), text_color="#CBD5E1")
         self.lbl_hi.pack(anchor="w")
         self.lbl_user = ctk.CTkLabel(parent, text="", font=("Segoe UI", 55, "bold"), text_color=COLOR_ACCENT)
         self.lbl_user.pack(anchor="w", pady=(0, 30))
@@ -97,7 +105,6 @@ class App(ctk.CTk):
         self.card_max = self.create_card(card_f, "💎 GIAO DỊCH LỚN NHẤT", COLOR_NUMBER, 1)
         card_f.grid_columnconfigure((0, 1), weight=1)
 
-        # Lịch sử thu nhỏ tại trang chủ
         ctk.CTkLabel(parent, text="🕒 GIAO DỊCH GẦN ĐÂY", font=("Segoe UI", 20, "bold"), text_color=COLOR_SUCCESS).pack(anchor="w", pady=(20, 10))
         self.home_list = ctk.CTkFrame(parent, fg_color=COLOR_CARD, corner_radius=20)
         self.home_list.pack(fill="x")
@@ -110,7 +117,8 @@ class App(ctk.CTk):
         f.grid(row=0, column=col, padx=15, sticky="nsew")
         ctk.CTkLabel(f, text=title, font=("Segoe UI", 16, "bold"), text_color=color).pack(pady=15)
         lbl = ctk.CTkLabel(f, text="0 ₫", font=("Consolas", 40, "bold"), text_color=COLOR_TEXT)
-        lbl.pack(pady=5); f.lbl = lbl
+        lbl.pack(pady=5)
+        f.lbl = lbl
         return f
 
     def refresh_dashboard(self):
@@ -120,7 +128,6 @@ class App(ctk.CTk):
         self.card_tong.lbl.configure(text=f"{int(tong):,} ₫".replace(",", "."))
         self.card_max.lbl.configure(text=f"{int(max_v):,} ₫".replace(",", "."))
         
-        # Cập nhật list trang chủ
         for w in self.home_list.winfo_children(): w.destroy()
         data = db.tim_kiem_giao_dich(datetime.now().strftime("%m/%Y"))[:5]
         for h in data:
@@ -142,7 +149,7 @@ class App(ctk.CTk):
         FigureCanvasTkAgg(fig, master=self.chart_box).get_tk_widget().pack(fill="both", expand=True)
         plt.close(fig)
 
-    # --- TRANG THỐNG KÊ (XÓA, TÌM KIẾM, XUẤT EXCEL) ---
+    # --- TRANG THỐNG KÊ ---
     def build_stats(self, parent):
         ctk.CTkLabel(parent, text="📊 CHI TIÊU CÁ NHÂN 2026", font=("Segoe UI", 32, "bold"), text_color=COLOR_SUCCESS).pack(pady=20)
         
@@ -153,12 +160,10 @@ class App(ctk.CTk):
         self.month_cb.set(datetime.now().strftime("%m/%Y"))
         self.month_cb.pack(side="left", padx=10, pady=15)
         
-        # Ô TÌM KIẾM
         self.search_in = ctk.CTkEntry(ctrl, placeholder_text="🔍 Tìm ghi chú...", width=200)
         self.search_in.pack(side="left", padx=10)
         self.search_in.bind("<KeyRelease>", lambda e: self.refresh_stats_page())
         
-        # NÚT XUẤT EXCEL
         ctk.CTkButton(ctrl, text="📥 XUẤT EXCEL", fg_color="#10B981", width=120, command=self.export_excel).pack(side="left", padx=10)
 
         self.lbl_stat_total = ctk.CTkLabel(ctrl, text="0 ₫", font=("Consolas", 22, "bold"), text_color=COLOR_NUMBER)
@@ -183,7 +188,6 @@ class App(ctk.CTk):
             ctk.CTkLabel(r, text=f"➜ {h[3]}", font=("Segoe UI", 14), text_color="white", anchor="w", width=250).pack(side="left", padx=10)
             ctk.CTkLabel(r, text=f"{int(h[2]):,} ₫".replace(",", "."), font=("Consolas", 16, "bold"), text_color=COLOR_SUCCESS).pack(side="left", padx=15)
             
-            # NÚT XÓA
             ctk.CTkButton(r, text="🗑️", width=40, fg_color="#E11D48", command=lambda x=h[0]: self.confirm_delete(x)).pack(side="right", padx=10)
 
     def confirm_delete(self, id_ngay):
@@ -196,7 +200,7 @@ class App(ctk.CTk):
         fname = db.xuat_bao_cao_excel(self.month_cb.get())
         if fname: messagebox.showinfo("Thành công", f"Đã xuất file: {fname}")
 
-    # --- TRANG NHẬP (VALIDATION & AI) ---
+    # --- TRANG NHẬP ---
     def build_add(self, parent):
         ctk.CTkLabel(parent, text="📝 GHI CHÉP CHI TIÊU", font=("Segoe UI", 32, "bold"), text_color=COLOR_ACCENT).pack(pady=40)
         self.i_loai = ctk.CTkOptionMenu(parent, values=["Ăn uống", "Đi lại", "Mua sắm", "Học tập", "Khác"], width=400, height=50)
@@ -213,7 +217,6 @@ class App(ctk.CTk):
         t_raw = self.i_tien.get()
         note = self.i_note.get()
         
-        # 2. XỬ LÝ LỖI NHẬP LIỆU
         if not t_raw or not note:
             messagebox.showwarning("Lỗi", "Vui lòng nhập đầy đủ tiền và ghi chú!")
             return
@@ -223,14 +226,17 @@ class App(ctk.CTk):
 
         tien = float(t_raw)
 
-        # AI CẢNH BÁO HẠN MỨC LỚN
         if tien > 5000000:
             if not messagebox.askyesno("AI Cảnh báo", f"Số tiền {int(tien):,} ₫ là rất lớn. Bạn chắc chứ?"):
                 return
 
-        # 5. DỰ BÁO AI (SO VỚI NGÂN SÁCH)
         u = db.lay_user_full()
-        da_tieu = db.lay_thong_ke_thang(datetime.now().strftime("%m/%Y"))
+        try:
+            da_tieu = db.lay_thong_ke_thang(datetime.now().strftime("%m/%Y"))
+            if da_tieu is None: da_tieu = 0
+        except:
+            da_tieu = 0
+            
         if (da_tieu + tien) > u[1]:
             messagebox.showwarning("AI Cảnh báo", "Khoản chi này sẽ khiến bạn VƯỢT ngân sách tháng!")
 
@@ -241,14 +247,14 @@ class App(ctk.CTk):
     # --- TRANG HỒ SƠ ---
     def build_profile(self, parent):
         u = db.lay_user_full()
-        ctk.CTkLabel(parent, text="🎀 THIẾT LẬP TÀI KHOẢN", font=("Segoe UI", 30, "bold"), text_color=COLOR_AI).pack(pady=30)
+        ctk.CTkLabel(parent, text="🎀 THIẾT LẬP TÀI KHOẢN", font=("Segoe UI", 30, "bold"), text_color="#8B5CF6").pack(pady=30)
         self.e_ten = self.create_in(parent, "Tên người dùng:", u[0])
-        self.e_mk = self.create_in(parent, "Mật khẩu AI mới:", u[5])
+        self.e_mk = self.create_in(parent, "Mật khẩu mới:", u[5])
         self.e_ns = self.create_in(parent, "Ngân sách tháng:", int(u[1]))
         self.e_tuoi = self.create_in(parent, "Tuổi:", u[2])
         self.e_cv = self.create_in(parent, "Nghề nghiệp:", u[3])
         self.e_mt = self.create_in(parent, "Mục tiêu tiết kiệm:", int(u[4]))
-        ctk.CTkButton(parent, text="LƯU THAY ĐỔI HỆ THỐNG", fg_color=COLOR_AI, font=("Segoe UI", 18, "bold"), 
+        ctk.CTkButton(parent, text="LƯU THAY ĐỔI HỆ THỐNG", fg_color="#8B5CF6", hover_color="#7C3AED", font=("Segoe UI", 18, "bold"), 
                        height=60, width=400, command=self.update_user).pack(pady=40)
 
     def create_in(self, master, label, val):
@@ -261,6 +267,87 @@ class App(ctk.CTk):
         db.cap_nhat_user_nang_cao(self.e_ten.get(), float(self.e_ns.get()), int(self.e_tuoi.get()), 
                                  self.e_cv.get(), float(self.e_mt.get()), self.e_mk.get())
         messagebox.showinfo("Thông báo", "Cập nhật thành công!"); self.show_page("home")
+
+    # --- TRANG TƯ VẤN AI ---
+    def build_ai(self, parent):
+        ctk.CTkLabel(parent, text="🤖 TRỢ LÝ TÀI CHÍNH AI", font=("Segoe UI", 32, "bold"), text_color="#8B5CF6").pack(pady=(30, 10))
+        ctk.CTkLabel(parent, text="Hệ thống thuật toán phân tích thói quen và đưa ra lời khuyên cá nhân hóa", font=("Segoe UI", 16), text_color="#94A3B8").pack(pady=(0, 20))
+        
+        self.ai_textbox = ctk.CTkTextbox(parent, font=("Segoe UI", 18), wrap="word", corner_radius=15, 
+                                         fg_color="#1E293B", text_color="white", border_width=1, border_color="#8B5CF6")
+        self.ai_textbox.pack(fill="both", expand=True, padx=40, pady=20)
+        self.ai_textbox.insert("0.0", "Xin chào! Nhấn nút bên dưới để AI bắt đầu quét dữ liệu chi tiêu tháng này của bạn...\n")
+        self.ai_textbox.configure(state="disabled")
+
+        ctk.CTkButton(parent, text="✨ PHÂN TÍCH VÀ ĐƯA RA LỜI KHUYÊN", fg_color="#8B5CF6", hover_color="#7C3AED", 
+                      font=("Segoe UI", 18, "bold"), height=60, width=400, command=self.generate_ai_advice).pack(pady=(0, 30))
+
+    def generate_ai_advice(self):
+        self.ai_textbox.configure(state="normal")
+        self.ai_textbox.delete("0.0", "end")
+        self.ai_textbox.insert("end", "⏳ Đang phân tích dữ liệu hệ thống...\n")
+        self.update() 
+
+        u = db.lay_user_full()
+        ten, ngan_sach, tuoi, nghe_nghiep, muc_tieu = u[0], float(u[1]), int(u[2]), u[3], float(u[4])
+        
+        try:
+            da_tieu = db.lay_thong_ke_thang(datetime.now().strftime("%m/%Y"))
+            if da_tieu is None: da_tieu = 0
+        except:
+            da_tieu = 0
+
+        phan_tram = (da_tieu / ngan_sach) * 100 if ngan_sach > 0 else 0
+        
+        loi_khuyen = f"📊 BÁO CÁO PHÂN TÍCH TÀI CHÍNH CHO {ten.upper()}:\n"
+        loi_khuyen += "-" * 50 + "\n\n"
+        
+        loi_khuyen += f"1️⃣ Tình trạng ngân sách tháng này:\n"
+        loi_khuyen += f"• Ngân sách cho phép: {int(ngan_sach):,} ₫\n"
+        loi_khuyen += f"• Bạn đã tiêu: {int(da_tieu):,} ₫ ({phan_tram:.1f}%)\n"
+        
+        if phan_tram == 0:
+            loi_khuyen += "💡 Đánh giá: Bạn chưa có khoản chi nào trong tháng này. Hãy tiếp tục duy trì thói quen ghi chép nhé!\n\n"
+        elif phan_tram < 50:
+            loi_khuyen += "💡 Đánh giá: Rất tuyệt vời! Bạn quản lý tiền rất tốt và đang đi đúng hướng.\n\n"
+        elif phan_tram < 80:
+            loi_khuyen += "⚠️ Đánh giá: Bạn đã tiêu quá nửa ngân sách. Hãy chú ý các khoản chi lặt vặt từ giờ đến cuối tháng.\n\n"
+        elif phan_tram <= 100:
+            loi_khuyen += "🚨 CẢNH BÁO: Bạn sắp hết ngân sách! Hãy ngừng ngay các khoản mua sắm không thực sự cần thiết.\n\n"
+        else:
+            loi_khuyen += "⛔ BÁO ĐỘNG ĐỎ: Bạn đã CHI VƯỢT ngân sách! Hãy xem xét lại ngay thói quen chi tiêu của mình.\n\n"
+
+        loi_khuyen += f"2️⃣ Tư vấn cá nhân hóa (Dựa trên nghề nghiệp '{nghe_nghiep}' và độ tuổi {tuoi}):\n"
+        
+        if tuoi < 25:
+            loi_khuyen += "• Ở độ tuổi trẻ, bạn nên tập trung đầu tư vào học tập và phát triển kỹ năng (mua sách, khóa học) thay vì chỉ mua sắm tiêu sản.\n"
+        elif 25 <= tuoi <= 35:
+            loi_khuyen += "• Đây là giai đoạn vàng để tích lũy tài sản. Hãy xem xét phân bổ 20% thu nhập vào các quỹ đầu tư an toàn.\n"
+        else:
+            loi_khuyen += "• Ưu tiên xây dựng quỹ dự phòng y tế và hưu trí để đảm bảo an toàn tài chính dài hạn.\n"
+
+        loi_khuyen += f"\n3️⃣ Đánh giá mục tiêu tiết kiệm ({int(muc_tieu):,} ₫):\n"
+        if muc_tieu <= 0:
+            loi_khuyen += "• Hiện tại bạn chưa thiết lập mục tiêu tiết kiệm. Người thành công luôn 'trả cho mình trước'. Hãy vào phần Hồ sơ để cập nhật mục tiêu nhé!\n"
+        else:
+            if da_tieu >= ngan_sach:
+                loi_khuyen += "• Rất tiếc, với đà chi tiêu hiện tại, bạn sẽ khó đạt được mục tiêu tiết kiệm. Hãy cắt giảm 15% các khoản 'Ăn uống ngoài' và 'Mua sắm'.\n"
+            else:
+                loi_khuyen += f"• Tuyệt vời! Nếu giữ vững phong độ, bạn hoàn toàn có thể đạt được mục tiêu {int(muc_tieu):,} ₫ một cách dễ dàng.\n"
+
+        loi_khuyen += "\n📌 Châm ngôn tài chính hôm nay:\n"
+        quotes = [
+            "Đừng tiết kiệm những gì còn lại sau khi chi tiêu, hãy chi tiêu những gì còn lại sau khi tiết kiệm. - Warren Buffett",
+            "Sự giàu có không phải là có nhiều tiền, mà là có nhiều lựa chọn.",
+            "Kẻ thù lớn nhất của sự tự do tài chính là thói quen chi tiêu bốc đồng.",
+            "Biết quản lý 1 triệu đồng thì mới có cơ hội sở hữu 1 tỷ đồng."
+        ]
+        loi_khuyen += f"\"{random.choice(quotes)}\""
+
+        self.ai_textbox.delete("0.0", "end")
+        self.ai_textbox.insert("end", loi_khuyen)
+        self.ai_textbox.configure(state="disabled") 
+        winsound.PlaySound("SystemAsterisk", winsound.SND_ASYNC)
 
 if __name__ == "__main__":
     App().mainloop()
